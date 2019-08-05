@@ -121,7 +121,7 @@ func displayHelper(input []string, username string, pwhash string, role string) 
 				log.Println(err)
 				break
 			}
-			ColorOutput("BALANCE: "+balance, MagentaColor)
+			log.Println(balance)
 		case "all":
 			balances, err := GetBalances(username, pwhash)
 			if err != nil {
@@ -135,7 +135,7 @@ func displayHelper(input []string, username string, pwhash string, role string) 
 				log.Println(err)
 				break
 			}
-			ColorOutput("BALANCE: "+balance, MagentaColor)
+			log.Println(balance)
 		}
 	case "profile":
 		log.Println("Displaying Profile")

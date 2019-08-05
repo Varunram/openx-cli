@@ -57,9 +57,9 @@ func GetBalances(username string, pwhash string) ([]horizon.Balance, error) {
 	return x, nil
 }
 
-func GetXLMBalance(username string, pwhash string) (string, error) {
+func GetXLMBalance(username string, pwhash string) (int, error) {
 	// get the balance from the balances API
-	var x string
+	var x int
 	data, err := erpc.GetRequest(ApiUrl + "/user/balance/xlm?" + "username=" + username + "&pwhash=" + pwhash)
 	if err != nil {
 		return x, err
@@ -71,9 +71,9 @@ func GetXLMBalance(username string, pwhash string) (string, error) {
 	return x, nil
 }
 
-func GetAssetBalance(username string, pwhash string, asset string) (string, error) {
+func GetAssetBalance(username string, pwhash string, asset string) (int, error) {
 	// get the balance from the balances API
-	var x string
+	var x int
 	data, err := erpc.GetRequest(ApiUrl + "/user/balance/asset?" + "username=" + username + "&pwhash=" + pwhash + "&asset=" + asset)
 	if err != nil {
 		return x, err
