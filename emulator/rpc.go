@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 
 	erpc "github.com/Varunram/essentials/rpc"
 	utils "github.com/Varunram/essentials/utils"
@@ -298,8 +299,7 @@ func SendLocalAsset(username string, pwhash string, seedpwd string, assetName st
 	return x, nil
 }
 
-func SendXLM(username string, pwhash string, seedpwd string, destination string,
-	amount string, memo string) (string, error) {
+func SendXLM(username string, pwhash string, seedpwd string, destination string, amount string) (string, error) {
 	var x string
 	data, err := erpc.GetRequest(ApiUrl + "/user/sendxlm?" + "username=" + username + "&pwhash=" + pwhash +
 		"&destination=" + destination + "&amount=" + amount + "&seedpwd=" + seedpwd)
@@ -471,4 +471,20 @@ func SendNewSharesEmail(username string, pwhash string, seedpwd string, email1 s
 		return x, err
 	}
 	return x, nil
+}
+
+func KillRpc(username string, pwhash string) {
+	body := ApiUrl + "/admin/kill?" + "username=" + username + "&pwhash=" + pwhash
+	log.Println("BODY: ", body)
+	erpc.GetRequest(body)
+	data, _ := erpc.GetRequest(ApiUrl + "/ping")
+	var x erpc.StatusResponse
+	// now data is in byte, we need the other structure now
+	json.Unmarshal(data, &x)
+	// the result would be the status of the platform
+	if x.Code != 0 {
+		ColorOutput("KILL COMMAND FAILED", RedColor)
+	} else {
+		ColorOutput("KILL COMMAND EXECUTED", GreenColor)
+	}
 }

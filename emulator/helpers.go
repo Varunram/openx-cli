@@ -270,11 +270,7 @@ func sendHelper(input []string, username string, pwhash string) {
 		}
 		// send xlm overs
 		amount := input[3]
-		var memo string
-		if len(input) > 4 {
-			memo = input[4]
-		}
-		txhash, err := SendXLM(username, pwhash, LocalSeedPwd, destination, amount, memo)
+		txhash, err := SendXLM(username, pwhash, LocalSeedPwd, destination, amount)
 		if err != nil {
 			log.Println(err)
 		}
@@ -477,4 +473,8 @@ func genNewSharesHelper(input []string, username string, pwhash string, seedpwd 
 	} else {
 		ColorOutput("COULD NOT SEND NEW SHARES OUT TO PARTIES", RedColor)
 	}
+}
+
+func killHelper(username string, pwhash string) {
+	KillRpc(username, pwhash)
 }

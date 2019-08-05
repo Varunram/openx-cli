@@ -52,6 +52,8 @@ func ParseInputOrig(input []string) error {
 		fmt.Println("LIST OF SUPPORTED COMMANDS: ")
 		fmt.Println("ping, display, exchange, ipfs, create, send, receive, propose, " +
 			"newstage0, myproposed, addcollateral, mystage1, mystage0")
+	case "kill":
+		killHelper(LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
 	case "ping":
 		pingHelper()
 	case "display":

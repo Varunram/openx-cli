@@ -50,6 +50,8 @@ func ParseInputRecp(input []string) error {
 	case "help":
 		log.Println("LIST OF SUPPORTED COMMANDS: ")
 		log.Println("ping, display, exchange, ipfs, create, send, receive, unlock, payback, finalize, originate")
+	case "kill":
+		killHelper(LocalRecipient.U.Username, LocalRecipient.U.Pwhash)
 	case "ping":
 		pingHelper()
 	case "display":

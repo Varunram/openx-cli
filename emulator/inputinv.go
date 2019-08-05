@@ -56,6 +56,8 @@ func ParseInputInv(input []string) error {
 	// input is greater than length 1 which means we can parse according to the command given
 	command := input[0]
 	switch command {
+	case "kill":
+		killHelper(LocalInvestor.U.Username, LocalInvestor.U.Pwhash)
 	case "help":
 		fmt.Println("LIST OF SUPPORTED COMMANDS: ")
 		fmt.Println("ping, display, exchange, ipfs, vote, kyc, invest, create, send, receive")

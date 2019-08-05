@@ -6,7 +6,6 @@ import (
 
 	erpc "github.com/Varunram/essentials/rpc"
 	scan "github.com/Varunram/essentials/scan"
-	consts "github.com/YaleOpenLab/openx/consts"
 	database "github.com/YaleOpenLab/openx/database"
 	solar "github.com/YaleOpenLab/openx/platforms/opensolar"
 	"github.com/chzyer/readline"
@@ -83,8 +82,8 @@ func main() {
 	promptColor := color.New(color.FgHiYellow).SprintFunc()
 	whiteColor := color.New(color.FgHiWhite).SprintFunc()
 	rl, err := readline.NewEx(&readline.Config{
-		Prompt:       promptColor("emulator") + whiteColor("# "),
-		HistoryFile:  consts.TellerHomeDir + "/history_emulator.txt",
+		Prompt:       promptColor("openx-cli") + whiteColor("# "),
+		HistoryFile:  "history_emulator.txt",
 		AutoComplete: autoComplete(),
 	})
 	ColorOutput("YOUR SEED IS: "+LocalSeed, RedColor)
