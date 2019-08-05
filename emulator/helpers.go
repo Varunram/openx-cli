@@ -168,7 +168,7 @@ func displayHelper(input []string, username string, pwhash string, role string) 
 			}
 		case "opensolar":
 			subsubcommand := input[3]
-			index, err := utils.StoICheck(subsubcommand)
+			index, err := utils.ToInt(subsubcommand)
 			if err != nil {
 				log.Println("Input not int, not retrieving!")
 				return
@@ -189,7 +189,7 @@ func exchangeHelper(input []string, username string, pwhash string, seed string)
 		log.Println("<exchange> amount")
 		return
 	}
-	amount, err := utils.StoICheck(input[1])
+	amount, err := utils.ToInt(input[1])
 	if err != nil {
 		log.Println(err)
 		return
@@ -204,7 +204,8 @@ func exchangeHelper(input []string, username string, pwhash string, seed string)
 	if response.Code == 200 {
 		ColorOutput("SUCCESSFUL, CHECK BALANCES", GreenColor)
 	} else {
-		ColorOutput("RESPONSE STATUS: "+utils.ItoS(response.Code), GreenColor)
+		responseString, _ := utils.ToString(response.Code)
+		ColorOutput("RESPONSE STATUS: "+responseString, GreenColor)
 	}
 }
 
@@ -262,7 +263,7 @@ func sendHelper(input []string, username string, pwhash string) {
 			break
 		}
 		destination := input[2]
-		_, err = utils.StoFWithCheck(input[3])
+		_, err = utils.ToFloat(input[3])
 		if err != nil {
 			log.Println(err)
 			break
@@ -310,7 +311,7 @@ func receiveHelper(input []string, username string, pwhash string) {
 
 		assetName := input[2]
 		issuerPubkey := input[3]
-		_, err = utils.StoFWithCheck(input[4])
+		_, err = utils.ToFloat(input[4])
 		if err != nil {
 			log.Println(err)
 			break
@@ -376,7 +377,7 @@ func kycHelper(input []string, username string, pwhash string, inspector bool) {
 			log.Println("kyc auth <userIndex>")
 			break
 		}
-		_, err = utils.StoICheck(input[1])
+		_, err = utils.ToInt(input[1])
 		if err != nil {
 			log.Println(err)
 			break
@@ -416,7 +417,7 @@ func increaseTrustHelper(input []string, username string, pwhash string) {
 		log.Println("<increasetrust> trustlimit")
 		return
 	}
-	trustLimit, err := utils.StoFWithCheck(input[1])
+	trustLimit, err := utils.ToFloat(input[1])
 	if err != nil {
 		log.Println(err, "input is not a string!")
 	}
@@ -424,7 +425,8 @@ func increaseTrustHelper(input []string, username string, pwhash string) {
 		log.Println("Can't increaset trustlimti by zero, quitting!")
 		return
 	}
-	response, err := IncreaseTrustLimit(username, pwhash, LocalSeedPwd, utils.FtoS(trustLimit))
+	trustString, _ := utils.ToString(trustLimit)
+	response, err := IncreaseTrustLimit(username, pwhash, LocalSeedPwd, trustString)
 	if err != nil {
 		log.Println(err)
 	}

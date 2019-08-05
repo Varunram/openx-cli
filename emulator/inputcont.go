@@ -88,7 +88,7 @@ func ParseInputCont(input []string) error {
 			break
 		}
 
-		_, err = utils.StoFWithCheck(input[2])
+		_, err = utils.ToFloat(input[2])
 		if err != nil {
 			log.Println(err)
 			break
@@ -106,7 +106,8 @@ func ParseInputCont(input []string) error {
 		if response.Code == 200 {
 			ColorOutput("SUCCESSFULLY ADDED COLLATERAL", GreenColor)
 		} else {
-			ColorOutput("RESPONSE STATUS: "+utils.ItoS(response.Code), GreenColor)
+			temp, _ := utils.ToString(response.Code)
+			ColorOutput("RESPONSE STATUS: "+temp, GreenColor)
 		}
 	case "mystage0":
 		x, err := GetStage0Contracts(LocalContractor.U.Username, LocalContractor.U.Pwhash)

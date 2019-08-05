@@ -23,14 +23,16 @@ func PingRpc() error {
 		return err
 	}
 	// the result would be the status of the platform
-	ColorOutput("PLATFORM STATUS: "+utils.ItoS(x.Code), GreenColor)
+	codeString, _ := utils.ToString(x.Code)
+	ColorOutput("PLATFORM STATUS: "+codeString, GreenColor)
 	return nil
 }
 
 func RetrieveProject(index int) ([]solar.Project, error) {
 	// retrieve project at a particular stage
 	var x []solar.Project
-	data, err := erpc.GetRequest(ApiUrl + "/projects?index=" + utils.ItoS(index))
+	indexString, _ := utils.ToString(index)
+	data, err := erpc.GetRequest(ApiUrl + "/projects?index=" + indexString)
 	if err != nil {
 		return x, err
 	}

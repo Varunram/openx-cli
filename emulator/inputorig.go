@@ -83,7 +83,7 @@ func ParseInputOrig(input []string) error {
 			break
 		}
 
-		_, err = utils.StoFWithCheck(input[2])
+		_, err = utils.ToFloat(input[2])
 		if err != nil {
 			log.Println(err)
 			break
@@ -101,7 +101,8 @@ func ParseInputOrig(input []string) error {
 		if response.Code == 200 {
 			ColorOutput("SUCCESSFULLY ADDED COLLATERAL", GreenColor)
 		} else {
-			ColorOutput("RESPONSE STATUS: "+utils.ItoS(response.Code), GreenColor)
+			temp, _ := utils.ToString(response.Code)
+			ColorOutput("RESPONSE STATUS: "+temp, GreenColor)
 		}
 	case "myproposed":
 		x, err := GetStage2Contracts(LocalOriginator.U.Username, LocalOriginator.U.Pwhash)

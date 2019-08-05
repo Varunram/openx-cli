@@ -87,12 +87,12 @@ func ParseInputInv(input []string) error {
 			log.Println("vote <projIndex> <amount>")
 			break
 		}
-		_, err = utils.StoICheck(input[1])
+		_, err = utils.ToInt(input[1])
 		if err != nil {
 			log.Println(err)
 			break
 		}
-		_, err = utils.StoICheck(input[2])
+		_, err = utils.ToInt(input[2])
 		if err != nil {
 			log.Println(err)
 			break
@@ -112,12 +112,12 @@ func ParseInputInv(input []string) error {
 			log.Println("Invest Params: invest <proj_number> <amount> <platform>")
 			break
 		}
-		_, err = utils.StoICheck(input[1])
+		_, err = utils.ToInt(input[1])
 		if err != nil {
 			log.Println(err)
 			break
 		}
-		_, err = utils.StoICheck(input[2])
+		_, err = utils.ToInt(input[2])
 		if err != nil {
 			log.Println(err)
 			break

@@ -4,6 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"log"
 
+	erpc "github.com/Varunram/essentials/rpc"
 	scan "github.com/Varunram/essentials/scan"
 	consts "github.com/YaleOpenLab/openx/consts"
 	database "github.com/YaleOpenLab/openx/database"
@@ -51,13 +52,13 @@ func SetupConfig() (string, error) {
 	log.Println("WELCOME TO THE SMARTSOLAR EMULATOR")
 
 	ColorOutput("ENTER YOUR USERNAME: ", CyanColor)
-	username, err := scan.ScanForString()
+	username, err := scan.ScanString()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	ColorOutput("ENTER YOUR PASSWORD: ", CyanColor)
-	pwhash, err := scan.ScanForPassword()
+	pwhash, err := scan.ScanPassword()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,6 +68,8 @@ func SetupConfig() (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "could not login to the platform")
 	}
+
+	erpc.SetConsts(100) // set a 100 second timeout interval
 	return role, nil
 }
 

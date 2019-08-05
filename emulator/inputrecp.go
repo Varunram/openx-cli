@@ -74,7 +74,7 @@ func ParseInputRecp(input []string) error {
 			log.Println("unlock <projIndex> <platform>")
 			break
 		}
-		_, err = utils.StoICheck(input[1])
+		_, err = utils.ToInt(input[1])
 		if err != nil {
 			log.Println(err)
 			break
@@ -118,12 +118,12 @@ func ParseInputRecp(input []string) error {
 			log.Println("payback <projIndex> <amount> <assetName>")
 			break
 		}
-		_, err = utils.StoICheck(input[1]) // projectIndex
+		_, err = utils.ToInt(input[1]) // projectIndex
 		if err != nil {
 			log.Println(err)
 			break
 		}
-		_, err = utils.StoICheck(input[2]) // amount
+		_, err = utils.ToInt(input[2]) // amount
 		if err != nil {
 			log.Println(err)
 			break
@@ -161,7 +161,7 @@ func ParseInputRecp(input []string) error {
 			break
 		}
 
-		_, err = utils.StoICheck(input[1])
+		_, err = utils.ToInt(input[1])
 		if err != nil {
 			log.Println(err)
 			break
@@ -185,7 +185,7 @@ func ParseInputRecp(input []string) error {
 			break
 		}
 
-		_, err = utils.StoICheck(input[1])
+		_, err = utils.ToInt(input[1])
 		if err != nil {
 			log.Println(err)
 			break
@@ -237,7 +237,7 @@ func ParseInputRecp(input []string) error {
 				break
 			}
 
-			limitF := utils.StoF(limit)
+			limitF, _ := utils.ToFloat(limit)
 			// get balance of debt asset here
 			debtBalance, err := GetAssetBalance(LocalRecipient.U.Username, LocalRecipient.U.Pwhash, assetName)
 			if err != nil {
@@ -245,9 +245,10 @@ func ParseInputRecp(input []string) error {
 				break
 			}
 
-			debtF := utils.StoF(debtBalance)
+			debtF, _ := utils.ToFloat(debtBalance)
 			ownership := (1 - debtF/(limitF/2)) * 100
-			ColorOutput("YOUR PERCENTAGE OWNERSHIP OF THE ASSET: "+utils.FtoS(ownership), MagentaColor)
+			ownershipString, _ := utils.ToString(ownership)
+			ColorOutput("YOUR PERCENTAGE OWNERSHIP OF THE ASSET: "+ownershipString, MagentaColor)
 		}
 	}
 	return nil
