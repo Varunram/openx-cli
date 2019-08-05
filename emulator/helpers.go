@@ -478,3 +478,16 @@ func genNewSharesHelper(input []string, username string, pwhash string, seedpwd 
 func killHelper(username string, pwhash string) {
 	KillRpc(username, pwhash)
 }
+
+func freezeHelper(username string, pwhash string) {
+	FreezeRpc(username, pwhash)
+}
+
+func nukeHelper(username string, pwhash string) {
+	code, err := GenKillCode(username, pwhash)
+	if err != nil {
+		ColorOutput("NUKE CODE GENERATION FAILED", RedColor)
+	} else {
+		ColorOutput("YOUR NUKE CODE IS: " + code, GreenColor)
+	}
+}

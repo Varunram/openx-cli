@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"log"
+	// "log"
 
 	erpc "github.com/Varunram/essentials/rpc"
 	utils "github.com/Varunram/essentials/utils"
@@ -475,7 +475,6 @@ func SendNewSharesEmail(username string, pwhash string, seedpwd string, email1 s
 
 func KillRpc(username string, pwhash string) {
 	body := ApiUrl + "/admin/kill?" + "username=" + username + "&pwhash=" + pwhash
-	log.Println("BODY: ", body)
 	erpc.GetRequest(body)
 	data, _ := erpc.GetRequest(ApiUrl + "/ping")
 	var x erpc.StatusResponse
@@ -487,4 +486,18 @@ func KillRpc(username string, pwhash string) {
 	} else {
 		ColorOutput("KILL COMMAND EXECUTED", GreenColor)
 	}
+}
+
+func FreezeRpc(username string, pwhash string) {
+	body := ApiUrl + "/admin/freeze?" + "username=" + username + "&pwhash=" + pwhash
+	erpc.GetRequest(body)
+}
+
+func GenKillCode(username string, pwhash string) (string, error) {
+	body := ApiUrl + "/admin/gennuke?" + "username=" + username + "&pwhash=" + pwhash
+	data, err := erpc.GetRequest(body)
+	if err != nil {
+		return string(data), err
+	}
+	return string(data), nil
 }
