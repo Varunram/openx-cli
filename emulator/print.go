@@ -3,20 +3,20 @@ package main
 import (
 	"fmt"
 
+	opensolar "github.com/YaleOpenLab/opensolar/core"
 	database "github.com/YaleOpenLab/openx/database"
-	solar "github.com/YaleOpenLab/openx/platforms/opensolar"
 	"github.com/stellar/go/protocols/horizon"
 )
 
 // PrintProjects is a vanity prettyprint function
-func PrintProjects(projects []solar.Project) {
+func PrintProjects(projects []opensolar.Project) {
 	for _, project := range projects {
 		PrintProject(project)
 	}
 }
 
 // PrintProject pretty prints out some stuff that we need in main.go
-func PrintProject(project solar.Project) {
+func PrintProject(project opensolar.Project) {
 	fmt.Println("          PROJECT INDEX: ", project.Index)
 	fmt.Println("          Panel Size: ", project.PanelSize)
 	fmt.Println("          Total Value: ", project.TotalValue)
@@ -46,7 +46,7 @@ func PrintProject(project solar.Project) {
 }
 
 // PrintInvestor pretty prints investors
-func PrintInvestor(investor database.Investor) {
+func PrintInvestor(investor opensolar.Investor) {
 	fmt.Println("          Your Public Key is: ", investor.U.StellarWallet.PublicKey)
 	fmt.Println("          Your Encrypted Seed is: ", investor.U.StellarWallet.EncryptedSeed)
 	fmt.Println("          Your Voting Balance is: ", investor.VotingBalance)
@@ -86,7 +86,7 @@ func PrintUser(user database.User) {
 }
 
 // PrintRecipient pretty prints recipients
-func PrintRecipient(recipient database.Recipient) {
+func PrintRecipient(recipient opensolar.Recipient) {
 	fmt.Println("          Your Index is: ", recipient.U.Index)
 	fmt.Println("          Your Public Key is: ", recipient.U.StellarWallet.PublicKey)
 	fmt.Println("          Your Encrypted Seed is: ", recipient.U.StellarWallet.EncryptedSeed)
@@ -105,7 +105,7 @@ func PrintRecipient(recipient database.Recipient) {
 }
 
 // PrintEntity is a vanity prettyprint function
-func PrintEntity(a solar.Entity) {
+func PrintEntity(a opensolar.Entity) {
 	fmt.Println("    WELCOME BACK ", a.U.Name)
 	fmt.Println("    			 Your Index is ", a.U.Index)
 	fmt.Println("          Your Public Key is: ", a.U.StellarWallet.PublicKey)

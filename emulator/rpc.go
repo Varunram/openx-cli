@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	// "log"
 
+	"github.com/stellar/go/protocols/horizon"
+
 	erpc "github.com/Varunram/essentials/rpc"
 	utils "github.com/Varunram/essentials/utils"
 	database "github.com/YaleOpenLab/openx/database"
-	solar "github.com/YaleOpenLab/openx/platforms/opensolar"
-	"github.com/stellar/go/protocols/horizon"
+
+	solar "github.com/YaleOpenLab/opensolar/core"
 )
 
 func PingRpc() error {

@@ -488,6 +488,6 @@ func nukeHelper(username string, pwhash string) {
 	if err != nil {
 		ColorOutput("NUKE CODE GENERATION FAILED", RedColor)
 	} else {
-		ColorOutput("YOUR NUKE CODE IS: " + code, GreenColor)
+		ColorOutput("YOUR NUKE CODE IS: "+code, GreenColor)
 	}
 }

@@ -6,8 +6,8 @@ import (
 
 	erpc "github.com/Varunram/essentials/rpc"
 	scan "github.com/Varunram/essentials/scan"
-	database "github.com/YaleOpenLab/openx/database"
-	solar "github.com/YaleOpenLab/openx/platforms/opensolar"
+	opensolar "github.com/YaleOpenLab/opensolar/core"
+	// database "github.com/YaleOpenLab/openx/database"
 	"github.com/chzyer/readline"
 	"github.com/fatih/color"
 	"github.com/spf13/viper"
@@ -22,17 +22,17 @@ import (
 // using the same backend that we have right now
 var (
 	// have a global variable for each entity
-	LocalRecipient    database.Recipient
-	LocalInvestor     database.Investor
-	LocalContractor   solar.Entity
-	LocalOriginator   solar.Entity
+	LocalRecipient    opensolar.Recipient
+	LocalInvestor     opensolar.Investor
+	LocalContractor   opensolar.Entity
+	LocalOriginator   opensolar.Entity
 	LocalSeed         string
 	LocalSeedPwd      string
 	PlatformPublicKey string
 )
 
 // ApiUrl points to the platform instance's public endpoint
-var ApiUrl = "http://localhost:8080"
+var ApiUrl = "http://localhost:8081"
 
 // SetupConfig reads from the teller's config file and authenticates with the platform
 func SetupConfig() (string, error) {

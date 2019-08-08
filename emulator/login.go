@@ -5,11 +5,10 @@ import (
 	"github.com/pkg/errors"
 	"log"
 
-	wallet "github.com/Varunram/essentials/crypto/xlm/wallet"
 	erpc "github.com/Varunram/essentials/rpc"
 	scan "github.com/Varunram/essentials/scan"
-	database "github.com/YaleOpenLab/openx/database"
-	solar "github.com/YaleOpenLab/openx/platforms/opensolar"
+	opensolar "github.com/YaleOpenLab/opensolar/core"
+	wallet "github.com/YaleOpenLab/openx/chains/xlm/wallet"
 	rpc "github.com/YaleOpenLab/openx/rpc"
 )
 
@@ -32,7 +31,7 @@ func Login(username string, pwhash string) (string, error) {
 		if err != nil {
 			return wString, errors.Wrap(err, "could not call ivnestor validate function")
 		}
-		var inv database.Investor
+		var inv opensolar.Investor
 		err = json.Unmarshal(data, &inv)
 		if err != nil {
 			return wString, errors.Wrap(err, "could not unmarshal json")
@@ -53,7 +52,7 @@ func Login(username string, pwhash string) (string, error) {
 		if err != nil {
 			return wString, errors.Wrap(err, "could not call recipient validate endpoint")
 		}
-		var recp database.Recipient
+		var recp opensolar.Recipient
 		err = json.Unmarshal(data, &recp)
 		if err != nil {
 			return wString, errors.Wrap(err, "could not unmarshal json")
@@ -74,7 +73,7 @@ func Login(username string, pwhash string) (string, error) {
 		if err != nil {
 			return wString, errors.Wrap(err, "could not call entity validate endpoint")
 		}
-		var entity solar.Entity
+		var entity opensolar.Entity
 		err = json.Unmarshal(data, &entity)
 		if err != nil {
 			return wString, errors.Wrap(err, "could not unmarshal json")
