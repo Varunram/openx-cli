@@ -1,9 +1,13 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"github.com/pkg/errors"
+	"io/ioutil"
 	"log"
+	"net/http"
 
 	erpc "github.com/Varunram/essentials/rpc"
 	scan "github.com/Varunram/essentials/scan"
@@ -12,9 +16,41 @@ import (
 	rpc "github.com/YaleOpenLab/openx/rpc"
 )
 
+func HttpsGetRequest(url string) ([]byte, error) {
+	// Create a CA certificate pool and add cert.pem to it
+	var dummy []byte
+	caCert, err := ioutil.ReadFile("server.crt")
+	if err != nil {
+		return nil, err
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				RootCAs: caCertPool,
+			},
+		},
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return dummy, errors.Wrap(err, "did not create new GET request")
+	}
+	req.Header.Set("Origin", "localhost")
+	res, err := client.Do(req)
+	if err != nil {
+		return dummy, errors.Wrap(err, "did not make request")
+	}
+	defer res.Body.Close()
+	return ioutil.ReadAll(res.Body)
+}
+
 // Login logs on to the platform
 func Login(username string, pwhash string) (string, error) {
 	var wString string
+
 	data, err := erpc.GetRequest(ApiUrl + "/user/validate?" + "username=" + username + "&pwhash=" + pwhash)
 	if err != nil {
 		return wString, errors.Wrap(err, "validate request failed")
@@ -22,6 +58,7 @@ func Login(username string, pwhash string) (string, error) {
 	var x rpc.ValidateParams
 	err = json.Unmarshal(data, &x)
 	if err != nil {
+		log.Println(string(data))
 		return wString, errors.Wrap(err, "could not unmarshal json")
 	}
 	switch x.Role {

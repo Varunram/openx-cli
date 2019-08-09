@@ -2,3 +2,4 @@
 ofcli/ofcli
 emulator/emulator
 emulator/history_emulator.txt
+server.crt
