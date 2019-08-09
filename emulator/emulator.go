@@ -32,7 +32,7 @@ var (
 )
 
 // ApiUrl points to the platform instance's public endpoint
-var ApiUrl = "https://localhost:8080"
+var ApiUrl = "http://localhost:8081"
 
 // SetupConfig reads from the teller's config file and authenticates with the platform
 func SetupConfig() (string, error) {
