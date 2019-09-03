@@ -51,29 +51,29 @@ func ParseInputRecp(input []string) error {
 		log.Println("LIST OF SUPPORTED COMMANDS: ")
 		log.Println("ping, display, exchange, ipfs, create, send, receive, unlock, payback, finalize, originate")
 	case "kill":
-		killHelper(LocalRecipient.U.Username, LocalRecipient.U.Pwhash)
+		killHelper(LocalRecipient.U.Username)
 	case "freeze":
-		freezeHelper(LocalRecipient.U.Username, LocalRecipient.U.Pwhash)
+		freezeHelper(LocalRecipient.U.Username)
 	case "gennuke":
-		nukeHelper(LocalRecipient.U.Username, LocalRecipient.U.Pwhash)
+		nukeHelper(LocalRecipient.U.Username)
 	case "ping":
 		pingHelper()
 	case "display":
-		displayHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Pwhash, "recipient")
+		displayHelper(input, LocalRecipient.U.Username, "recipient")
 	case "exchange":
-		exchangeHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Pwhash, LocalSeed)
+		exchangeHelper(input, LocalRecipient.U.Username, LocalSeed)
 	case "ipfs":
-		ipfsHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Pwhash)
+		ipfsHelper(input, LocalRecipient.U.Username)
 	case "send":
-		sendHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Pwhash)
+		sendHelper(input, LocalRecipient.U.Username)
 	case "receive":
-		receiveHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Pwhash)
+		receiveHelper(input, LocalRecipient.U.Username)
 	case "create":
-		createHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Pwhash, LocalRecipient.U.StellarWallet.PublicKey)
+		createHelper(input, LocalRecipient.U.Username, LocalRecipient.U.StellarWallet.PublicKey)
 	case "kyc":
-		kycHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Pwhash, LocalRecipient.U.Inspector)
+		kycHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Inspector)
 	case "increasetrust":
-		increaseTrustHelper(input, LocalRecipient.U.Username, LocalRecipient.U.Pwhash)
+		increaseTrustHelper(input, LocalRecipient.U.Username)
 	// Recipient Only functions
 	case "unlock":
 		if len(input) < 3 {
@@ -88,7 +88,7 @@ func ParseInputRecp(input []string) error {
 		platform := input[2]
 		switch platform {
 		case "opensolar":
-			status, err := UnlockOpenSolar(LocalRecipient.U.Username, LocalRecipient.U.Pwhash, LocalSeedPwd, input[1])
+			status, err := UnlockOpenSolar(LocalRecipient.U.Username, LocalSeedPwd, input[1])
 			if err != nil {
 				log.Println(err)
 				break
@@ -107,7 +107,7 @@ func ParseInputRecp(input []string) error {
 			switch model {
 			case "cbond":
 				log.Println("CGOND OKS")
-				status, err := UnlockCBond(LocalRecipient.U.Username, LocalRecipient.U.Pwhash, LocalSeedPwd, input[1])
+				status, err := UnlockCBond(LocalRecipient.U.Username, LocalSeedPwd, input[1])
 				if err != nil {
 					log.Println(err)
 					break
@@ -151,7 +151,7 @@ func ParseInputRecp(input []string) error {
 			return errors.New("asset not found within received projects list")
 		}
 
-		status, err := Payback(projIndex, LocalSeedPwd, LocalRecipient.U.Username, LocalRecipient.U.Pwhash, assetName, amount)
+		status, err := Payback(projIndex, LocalSeedPwd, LocalRecipient.U.Username, assetName, amount)
 		if err != nil {
 			log.Println(err)
 			break
@@ -175,7 +175,7 @@ func ParseInputRecp(input []string) error {
 
 		projIndex := input[1]
 
-		status, err := FinalizeProject(LocalRecipient.U.Username, LocalRecipient.U.Pwhash, projIndex)
+		status, err := FinalizeProject(LocalRecipient.U.Username, projIndex)
 		if err != nil {
 			log.Println(err)
 			break
@@ -199,7 +199,7 @@ func ParseInputRecp(input []string) error {
 
 		projIndex := input[1]
 
-		status, err := OriginateProject(LocalRecipient.U.Username, LocalRecipient.U.Pwhash, projIndex)
+		status, err := OriginateProject(LocalRecipient.U.Username, projIndex)
 		if err != nil {
 			log.Println(err)
 			break
@@ -237,7 +237,7 @@ func ParseInputRecp(input []string) error {
 				return errors.New("asset not found within received projects list")
 			}
 
-			limit, err := GetTrustLimit(LocalRecipient.U.Username, LocalRecipient.U.Pwhash, assetName)
+			limit, err := GetTrustLimit(LocalRecipient.U.Username, assetName)
 			if err != nil {
 				log.Println(err)
 				break
@@ -245,7 +245,7 @@ func ParseInputRecp(input []string) error {
 
 			limitF, _ := utils.ToFloat(limit)
 			// get balance of debt asset here
-			debtBalance, err := GetAssetBalance(LocalRecipient.U.Username, LocalRecipient.U.Pwhash, assetName)
+			debtBalance, err := GetAssetBalance(LocalRecipient.U.Username, assetName)
 			if err != nil {
 				log.Println(err)
 				break

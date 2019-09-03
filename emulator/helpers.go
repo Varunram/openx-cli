@@ -92,7 +92,7 @@ func autoComplete() readline.AutoCompleter {
 	)
 }
 
-func displayHelper(input []string, username string, pwhash string, role string) {
+func displayHelper(input []string, username string, role string) {
 	// display is a  broad command and needs to have a subcommand
 	if len(input) == 1 {
 		// only display was given, so display help command
@@ -104,7 +104,7 @@ func displayHelper(input []string, username string, pwhash string, role string) 
 	case "balance":
 		if len(input) == 2 {
 			log.Println("Calling balances API")
-			balances, err := GetBalances(username, pwhash)
+			balances, err := GetBalances(username)
 			if err != nil {
 				log.Println(err)
 				break
@@ -116,21 +116,21 @@ func displayHelper(input []string, username string, pwhash string, role string) 
 		switch subcommand {
 		case "xlm":
 			// print xlm balance
-			balance, err := GetXLMBalance(username, pwhash)
+			balance, err := GetXLMBalance(username)
 			if err != nil {
 				log.Println(err)
 				break
 			}
 			log.Println(balance)
 		case "all":
-			balances, err := GetBalances(username, pwhash)
+			balances, err := GetBalances(username)
 			if err != nil {
 				log.Println(err)
 				break
 			}
 			PrintBalances(balances)
 		default:
-			balance, err := GetAssetBalance(username, pwhash, subcommand)
+			balance, err := GetAssetBalance(username, subcommand)
 			if err != nil {
 				log.Println(err)
 				break
@@ -183,7 +183,7 @@ func displayHelper(input []string, username string, pwhash string, role string) 
 	} // end of display
 }
 
-func exchangeHelper(input []string, username string, pwhash string, seed string) {
+func exchangeHelper(input []string, username string, seed string) {
 	if len(input) != 2 {
 		// only display was given, so display help command
 		log.Println("<exchange> amount")
@@ -196,7 +196,7 @@ func exchangeHelper(input []string, username string, pwhash string, seed string)
 	}
 	// convert this to int and check if int
 	fmt.Println("Exchanging", amount, "XLM for STABLEUSD")
-	response, err := GetStableCoin(username, pwhash, input[1])
+	response, err := GetStableCoin(username, input[1])
 	if err != nil {
 		log.Println(err)
 		return
@@ -209,13 +209,13 @@ func exchangeHelper(input []string, username string, pwhash string, seed string)
 	}
 }
 
-func ipfsHelper(input []string, username string, pwhash string) {
+func ipfsHelper(input []string, username string) {
 	if len(input) != 2 {
 		log.Println("<ipfs> string")
 		return
 	}
 	inputString := input[1]
-	hashString, err := GetIpfsHash(username, pwhash, inputString)
+	hashString, err := GetIpfsHash(username, inputString)
 	if err != nil {
 		log.Println(err)
 		return
@@ -232,7 +232,7 @@ func pingHelper() {
 	}
 }
 
-func sendHelper(input []string, username string, pwhash string) {
+func sendHelper(input []string, username string) {
 	var err error
 	if len(input) == 1 {
 		log.Println("send <asset>")
@@ -250,7 +250,7 @@ func sendHelper(input []string, username string, pwhash string) {
 		destination := input[3]
 		amount := input[4]
 
-		txhash, err := SendLocalAsset(username, pwhash,
+		txhash, err := SendLocalAsset(username,
 			LocalSeedPwd, assetName, destination, amount)
 		if err != nil {
 			log.Println(err)
@@ -270,7 +270,7 @@ func sendHelper(input []string, username string, pwhash string) {
 		}
 		// send xlm overs
 		amount := input[3]
-		txhash, err := SendXLM(username, pwhash, LocalSeedPwd, destination, amount)
+		txhash, err := SendXLM(username, LocalSeedPwd, destination, amount)
 		if err != nil {
 			log.Println(err)
 		}
@@ -278,7 +278,7 @@ func sendHelper(input []string, username string, pwhash string) {
 	}
 }
 
-func receiveHelper(input []string, username string, pwhash string) {
+func receiveHelper(input []string, username string) {
 	// we can either receive from the faucet or trust issuers to receive assets
 	var err error
 	if len(input) == 1 {
@@ -288,7 +288,7 @@ func receiveHelper(input []string, username string, pwhash string) {
 	subcommand := input[1]
 	switch subcommand {
 	case "xlm":
-		status, err := AskXLM(username, pwhash)
+		status, err := AskXLM(username)
 		if err != nil {
 			log.Println(err)
 			break
@@ -315,7 +315,7 @@ func receiveHelper(input []string, username string, pwhash string) {
 
 		limit := input[4]
 
-		status, err := TrustAsset(username, pwhash, assetName, issuerPubkey, limit, LocalSeedPwd)
+		status, err := TrustAsset(username, assetName, issuerPubkey, limit, LocalSeedPwd)
 		if err != nil {
 			log.Println(err)
 			break
@@ -328,7 +328,7 @@ func receiveHelper(input []string, username string, pwhash string) {
 	} // end of receive
 }
 
-func createHelper(input []string, username string, pwhash string, pubkey string) {
+func createHelper(input []string, username string, pubkey string) {
 	// create enables you to create tokens on stellar that you can excahnge with third parties.
 	if len(input) == 1 {
 		log.Println("create <asset>")
@@ -343,7 +343,7 @@ func createHelper(input []string, username string, pwhash string, pubkey string)
 			break
 		}
 		assetName := input[2]
-		status, err := CreateAssetInv(username, pwhash, assetName, pubkey)
+		status, err := CreateAssetInv(username, assetName, pubkey)
 		if err != nil {
 			log.Println(err)
 			return
@@ -356,7 +356,7 @@ func createHelper(input []string, username string, pwhash string, pubkey string)
 	} // end of create
 }
 
-func kycHelper(input []string, username string, pwhash string, inspector bool) {
+func kycHelper(input []string, username string, inspector bool) {
 	var err error
 	if !inspector {
 		ColorOutput("YOU ARE NOT A KYC INSPECTOR", RedColor)
@@ -378,7 +378,7 @@ func kycHelper(input []string, username string, pwhash string, inspector bool) {
 			log.Println(err)
 			break
 		}
-		status, err := AuthKyc(input[1], username, pwhash)
+		status, err := AuthKyc(input[1], username)
 		if err != nil {
 			log.Println(err)
 			break
@@ -389,7 +389,7 @@ func kycHelper(input []string, username string, pwhash string, inspector bool) {
 			ColorOutput("USER NOT KYC'D", RedColor)
 		}
 	case "notdone":
-		users, err := NotKycView(username, pwhash)
+		users, err := NotKycView(username)
 		if err != nil {
 			log.Println(err)
 			break
@@ -397,7 +397,7 @@ func kycHelper(input []string, username string, pwhash string, inspector bool) {
 		PrintUsers(users)
 		// print all the users who have kyc'd
 	case "done":
-		users, err := KycView(username, pwhash)
+		users, err := KycView(username)
 		if err != nil {
 			log.Println(err)
 			break
@@ -408,7 +408,7 @@ func kycHelper(input []string, username string, pwhash string, inspector bool) {
 	// end of kyc
 }
 
-func increaseTrustHelper(input []string, username string, pwhash string) {
+func increaseTrustHelper(input []string, username string) {
 	if len(input) == 1 {
 		log.Println("<increasetrust> trustlimit")
 		return
@@ -422,7 +422,7 @@ func increaseTrustHelper(input []string, username string, pwhash string) {
 		return
 	}
 	trustString, _ := utils.ToString(trustLimit)
-	response, err := IncreaseTrustLimit(username, pwhash, LocalSeedPwd, trustString)
+	response, err := IncreaseTrustLimit(username, LocalSeedPwd, trustString)
 	if err != nil {
 		log.Println(err)
 	}
@@ -433,7 +433,7 @@ func increaseTrustHelper(input []string, username string, pwhash string) {
 	}
 }
 
-func sendSharesEmailHelper(input []string, username string, pwhash string) {
+func sendSharesEmailHelper(input []string, username string) {
 	if len(input) != 4 {
 		log.Println("<sendshares> email1 email2 email3")
 		return
@@ -442,7 +442,7 @@ func sendSharesEmailHelper(input []string, username string, pwhash string) {
 	email2 := input[2]
 	email3 := input[3]
 
-	response, err := SendSharesEmail(username, pwhash, email1, email2, email3)
+	response, err := SendSharesEmail(username, email1, email2, email3)
 	if err != nil {
 		log.Println(err)
 	}
@@ -453,7 +453,7 @@ func sendSharesEmailHelper(input []string, username string, pwhash string) {
 	}
 }
 
-func genNewSharesHelper(input []string, username string, pwhash string, seedpwd string) {
+func genNewSharesHelper(input []string, username string, seedpwd string) {
 	if len(input) != 4 {
 		log.Println("<newshares> email1 email2 email3")
 		return
@@ -463,7 +463,7 @@ func genNewSharesHelper(input []string, username string, pwhash string, seedpwd 
 	email2 := input[2]
 	email3 := input[3]
 
-	response, err := SendNewSharesEmail(username, pwhash, seedpwd, email1, email2, email3)
+	response, err := SendNewSharesEmail(username, seedpwd, email1, email2, email3)
 	if err != nil {
 		log.Println(err)
 	}
@@ -475,16 +475,16 @@ func genNewSharesHelper(input []string, username string, pwhash string, seedpwd 
 	}
 }
 
-func killHelper(username string, pwhash string) {
-	KillRpc(username, pwhash)
+func killHelper(username string) {
+	KillRpc(username)
 }
 
-func freezeHelper(username string, pwhash string) {
-	FreezeRpc(username, pwhash)
+func freezeHelper(username string) {
+	FreezeRpc(username)
 }
 
-func nukeHelper(username string, pwhash string) {
-	code, err := GenKillCode(username, pwhash)
+func nukeHelper(username string) {
+	code, err := GenKillCode(username)
 	if err != nil {
 		ColorOutput("NUKE CODE GENERATION FAILED", RedColor)
 	} else {

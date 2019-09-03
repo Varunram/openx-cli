@@ -53,32 +53,32 @@ func ParseInputCont(input []string) error {
 		fmt.Println("ping, display, exchange, ipfs, create, send, receive, originate, " +
 			"propose, myproposed, addcollateral, mystage1, mystage0")
 	case "kill":
-		killHelper(LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		killHelper(LocalOriginator.U.Username)
 	case "ping":
 		pingHelper()
 	case "display":
-		displayHelper(input, LocalContractor.U.Username, LocalContractor.U.Pwhash, "contractor")
+		displayHelper(input, LocalContractor.U.Username, "contractor")
 	case "exchange":
-		exchangeHelper(input, LocalContractor.U.Username, LocalContractor.U.Pwhash, LocalSeed)
+		exchangeHelper(input, LocalContractor.U.Username, LocalSeed)
 	case "ipfs":
-		ipfsHelper(input, LocalContractor.U.Username, LocalContractor.U.Pwhash)
+		ipfsHelper(input, LocalContractor.U.Username)
 	case "send":
-		sendHelper(input, LocalContractor.U.Username, LocalContractor.U.Pwhash)
+		sendHelper(input, LocalContractor.U.Username)
 	case "receive":
-		receiveHelper(input, LocalContractor.U.Username, LocalContractor.U.Pwhash)
+		receiveHelper(input, LocalContractor.U.Username)
 	case "create":
-		createHelper(input, LocalContractor.U.Username, LocalContractor.U.Pwhash, LocalContractor.U.StellarWallet.PublicKey)
+		createHelper(input, LocalContractor.U.Username, LocalContractor.U.StellarWallet.PublicKey)
 	case "kyc":
-		kycHelper(input, LocalContractor.U.Username, LocalContractor.U.Pwhash, LocalContractor.U.Inspector)
+		kycHelper(input, LocalContractor.U.Username, LocalContractor.U.Inspector)
 	case "increasetrust":
-		increaseTrustHelper(input, LocalContractor.U.Username, LocalContractor.U.Pwhash)
+		increaseTrustHelper(input, LocalContractor.U.Username)
 	// Contractor only functions
 	case "propose":
 		fmt.Println("Proposing a contract can be done only through the opensolar webui" +
 			"since that involves document verification")
 		// end of propose
 	case "myproposed":
-		x, err := GetStage2Contracts(LocalContractor.U.Username, LocalContractor.U.Pwhash)
+		x, err := GetStage2Contracts(LocalContractor.U.Username)
 		if err != nil {
 			log.Println(err)
 			break
@@ -99,7 +99,7 @@ func ParseInputCont(input []string) error {
 		collateral := input[1]
 		amount := input[2]
 
-		response, err := AddCollateral(LocalContractor.U.Username, LocalContractor.U.Pwhash, collateral, amount)
+		response, err := AddCollateral(LocalContractor.U.Username, collateral, amount)
 		if err != nil {
 			log.Println(err)
 			break
@@ -112,7 +112,7 @@ func ParseInputCont(input []string) error {
 			ColorOutput("RESPONSE STATUS: "+temp, GreenColor)
 		}
 	case "mystage0":
-		x, err := GetStage0Contracts(LocalContractor.U.Username, LocalContractor.U.Pwhash)
+		x, err := GetStage0Contracts(LocalContractor.U.Username)
 		if err != nil {
 			log.Println(err)
 			break
@@ -120,7 +120,7 @@ func ParseInputCont(input []string) error {
 		log.Println(x)
 	case "mystage1": // if the contractor acts as an originator sometime. Bool setting would be weird,
 		// but I guess there's nothing that prevents a contractor from acting as an originator, so we allow this.
-		x, err := GetStage1Contracts(LocalContractor.U.Username, LocalContractor.U.Pwhash)
+		x, err := GetStage1Contracts(LocalContractor.U.Username)
 		if err != nil {
 			log.Println(err)
 			break

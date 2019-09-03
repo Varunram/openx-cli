@@ -46,10 +46,10 @@ func RetrieveProject(index int) ([]solar.Project, error) {
 	return x, nil
 }
 
-func GetBalances(username string, pwhash string) ([]horizon.Balance, error) {
+func GetBalances(username string) ([]horizon.Balance, error) {
 	// get the balance from the balances API
 	var x []horizon.Balance
-	data, err := erpc.GetRequest(ApiUrl + "/user/balances?" + "username=" + username + "&pwhash=" + pwhash)
+	data, err := erpc.GetRequest(ApiUrl + "/user/balances?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -60,10 +60,10 @@ func GetBalances(username string, pwhash string) ([]horizon.Balance, error) {
 	return x, nil
 }
 
-func GetXLMBalance(username string, pwhash string) (int, error) {
+func GetXLMBalance(username string) (int, error) {
 	// get the balance from the balances API
 	var x int
-	data, err := erpc.GetRequest(ApiUrl + "/user/balance/xlm?" + "username=" + username + "&pwhash=" + pwhash)
+	data, err := erpc.GetRequest(ApiUrl + "/user/balance/xlm?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -74,10 +74,10 @@ func GetXLMBalance(username string, pwhash string) (int, error) {
 	return x, nil
 }
 
-func GetAssetBalance(username string, pwhash string, asset string) (int, error) {
+func GetAssetBalance(username string, asset string) (int, error) {
 	// get the balance from the balances API
 	var x int
-	data, err := erpc.GetRequest(ApiUrl + "/user/balance/asset?" + "username=" + username + "&pwhash=" + pwhash + "&asset=" + asset)
+	data, err := erpc.GetRequest(ApiUrl + "/user/balance/asset?" + "username=" + username + "&token=" + Token + "&asset=" + asset)
 	if err != nil {
 		return x, err
 	}
@@ -88,10 +88,10 @@ func GetAssetBalance(username string, pwhash string, asset string) (int, error) 
 	return x, nil
 }
 
-func GetStableCoin(username string, pwhash string, amount string) (erpc.StatusResponse, error) {
+func GetStableCoin(username string, amount string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
 	data, err := erpc.GetRequest(ApiUrl + "/stablecoin/get?" + "seedpwd=" + LocalSeedPwd + "&amount=" +
-		amount + "&username=" + username + "&pwhash=" + pwhash)
+		amount + "&username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -102,10 +102,10 @@ func GetStableCoin(username string, pwhash string, amount string) (erpc.StatusRe
 	return x, nil
 }
 
-func GetIpfsHash(username string, pwhash string, hashString string) (string, error) {
+func GetIpfsHash(username string, hashString string) (string, error) {
 	var x string
 	data, err := erpc.GetRequest(ApiUrl + "/ipfs/hash?" + "string=" + hashString +
-		"&username=" + username + "&pwhash=" + pwhash)
+		"&username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -116,9 +116,9 @@ func GetIpfsHash(username string, pwhash string, hashString string) (string, err
 	return x, nil
 }
 
-func InvestInProject(projIndex string, amount string, username string, pwhash string, seedpwd string) (erpc.StatusResponse, error) {
+func InvestInProject(projIndex string, amount string, username string, seedpwd string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/investor/invest?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/investor/invest?" + "username=" + username + "&token=" + Token +
 		"&seedpwd=" + seedpwd + "&projIndex=" + projIndex + "&amount=" + amount)
 	if err != nil {
 		return x, err
@@ -130,9 +130,9 @@ func InvestInProject(projIndex string, amount string, username string, pwhash st
 	return x, nil
 }
 
-func VoteTowardsProject(projIndex string, amount string, username string, pwhash string) (erpc.StatusResponse, error) {
+func VoteTowardsProject(projIndex string, amount string, username string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/investor/vote?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/investor/vote?" + "username=" + username + "&token=" + Token +
 		"&projIndex=" + projIndex + "&votes=" + amount)
 	if err != nil {
 		return x, err
@@ -144,9 +144,9 @@ func VoteTowardsProject(projIndex string, amount string, username string, pwhash
 	return x, nil
 }
 
-func AuthKyc(userIndex string, username string, pwhash string) (erpc.StatusResponse, error) {
+func AuthKyc(userIndex string, username string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/user/kyc?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/user/kyc?" + "username=" + username + "&token=" + Token +
 		"&userIndex=" + userIndex)
 	if err != nil {
 		return x, err
@@ -158,10 +158,10 @@ func AuthKyc(userIndex string, username string, pwhash string) (erpc.StatusRespo
 	return x, nil
 }
 
-func Payback(projIndex string, seedpwd string, username string, pwhash string, assetName string,
+func Payback(projIndex string, seedpwd string, username string, assetName string,
 	amount string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/recipient/payback?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/recipient/payback?" + "username=" + username + "&token=" + Token +
 		"&projIndex=" + projIndex + "&seedpwd=" + seedpwd + "&amount=" + amount + "&assetName=" + assetName +
 		"&platformPublicKey=" + PlatformPublicKey)
 	if err != nil {
@@ -174,9 +174,9 @@ func Payback(projIndex string, seedpwd string, username string, pwhash string, a
 	return x, nil
 }
 
-func UnlockOpenSolar(username string, pwhash string, seedpwd string, projIndex string) (erpc.StatusResponse, error) {
+func UnlockOpenSolar(username string, seedpwd string, projIndex string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	body := ApiUrl + "/recipient/unlock/opensolar?" + "username=" + username + "&pwhash=" + pwhash +
+	body := ApiUrl + "/recipient/unlock/opensolar?" + "username=" + username + "&token=" + Token +
 		"&projIndex=" + projIndex + "&seedpwd=" + seedpwd
 
 	data, err := erpc.GetRequest(body)
@@ -190,9 +190,9 @@ func UnlockOpenSolar(username string, pwhash string, seedpwd string, projIndex s
 	return x, nil
 }
 
-func FinalizeProject(username string, pwhash string, projIndex string) (erpc.StatusResponse, error) {
+func FinalizeProject(username string, projIndex string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/recipient/finalize?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/recipient/finalize?" + "username=" + username + "&token=" + Token +
 		"&projIndex=" + projIndex)
 	if err != nil {
 		return x, err
@@ -204,9 +204,9 @@ func FinalizeProject(username string, pwhash string, projIndex string) (erpc.Sta
 	return x, nil
 }
 
-func OriginateProject(username string, pwhash string, projIndex string) (erpc.StatusResponse, error) {
+func OriginateProject(username string, projIndex string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/recipient/originate?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/recipient/originate?" + "username=" + username + "&token=" + Token +
 		"&projIndex=" + projIndex)
 	if err != nil {
 		return x, err
@@ -218,9 +218,9 @@ func OriginateProject(username string, pwhash string, projIndex string) (erpc.St
 	return x, nil
 }
 
-func GetStage1Contracts(username string, pwhash string) ([]solar.Project, error) {
+func GetStage1Contracts(username string) ([]solar.Project, error) {
 	var x []solar.Project
-	data, err := erpc.GetRequest(ApiUrl + "/entity/stage1?" + "username=" + username + "&pwhash=" + pwhash)
+	data, err := erpc.GetRequest(ApiUrl + "/entity/stage1?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -231,9 +231,9 @@ func GetStage1Contracts(username string, pwhash string) ([]solar.Project, error)
 	return x, nil
 }
 
-func GetStage0Contracts(username string, pwhash string) ([]solar.Project, error) {
+func GetStage0Contracts(username string) ([]solar.Project, error) {
 	var x []solar.Project
-	data, err := erpc.GetRequest(ApiUrl + "/entity/stage0?" + "username=" + username + "&pwhash=" + pwhash)
+	data, err := erpc.GetRequest(ApiUrl + "/entity/stage0?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -244,9 +244,9 @@ func GetStage0Contracts(username string, pwhash string) ([]solar.Project, error)
 	return x, nil
 }
 
-func GetStage2Contracts(username string, pwhash string) ([]solar.Project, error) {
+func GetStage2Contracts(username string) ([]solar.Project, error) {
 	var x []solar.Project
-	data, err := erpc.GetRequest(ApiUrl + "/entity/stage2?" + "username=" + username + "&pwhash=" + pwhash)
+	data, err := erpc.GetRequest(ApiUrl + "/entity/stage2?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -257,9 +257,9 @@ func GetStage2Contracts(username string, pwhash string) ([]solar.Project, error)
 	return x, nil
 }
 
-func AddCollateral(username string, pwhash string, collateral string, amount string) (erpc.StatusResponse, error) {
+func AddCollateral(username string, collateral string, amount string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/entity/addcollateral?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/entity/addcollateral?" + "username=" + username + "&token=" + Token +
 		"&collateral=" + collateral + "&amount=" + amount)
 	if err != nil {
 		return x, err
@@ -271,9 +271,9 @@ func AddCollateral(username string, pwhash string, collateral string, amount str
 	return x, nil
 }
 
-func CreateAssetInv(username string, pwhash string, assetName string, pubkey string) (erpc.StatusResponse, error) {
+func CreateAssetInv(username string, assetName string, pubkey string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/investor/localasset?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/investor/localasset?" + "username=" + username + "&token=" + Token +
 		"&assetName=" + assetName)
 	if err != nil {
 		return x, err
@@ -285,11 +285,11 @@ func CreateAssetInv(username string, pwhash string, assetName string, pubkey str
 	return x, nil
 }
 
-func SendLocalAsset(username string, pwhash string, seedpwd string, assetName string,
+func SendLocalAsset(username string, seedpwd string, assetName string,
 	destination string, amount string) (string, error) {
 	var x string
 
-	data, err := erpc.GetRequest(ApiUrl + "/investor/sendlocalasset?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/investor/sendlocalasset?" + "username=" + username + "&token=" + Token +
 		"&assetName=" + assetName + "&destination=" + destination + "&amount=" + amount + "&seedpwd=" + seedpwd)
 	if err != nil {
 		return x, err
@@ -301,9 +301,9 @@ func SendLocalAsset(username string, pwhash string, seedpwd string, assetName st
 	return x, nil
 }
 
-func SendXLM(username string, pwhash string, seedpwd string, destination string, amount string) (string, error) {
+func SendXLM(username string, seedpwd string, destination string, amount string) (string, error) {
 	var x string
-	data, err := erpc.GetRequest(ApiUrl + "/user/sendxlm?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/user/sendxlm?" + "username=" + username + "&token=" + Token +
 		"&destination=" + destination + "&amount=" + amount + "&seedpwd=" + seedpwd)
 	if err != nil {
 		return x, err
@@ -315,9 +315,9 @@ func SendXLM(username string, pwhash string, seedpwd string, destination string,
 	return x, nil
 }
 
-func NotKycView(username string, pwhash string) ([]database.User, error) {
+func NotKycView(username string) ([]database.User, error) {
 	var x []database.User
-	data, err := erpc.GetRequest(ApiUrl + "/user/notkycview?" + "username=" + username + "&pwhash=" + pwhash)
+	data, err := erpc.GetRequest(ApiUrl + "/user/notkycview?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -328,9 +328,9 @@ func NotKycView(username string, pwhash string) ([]database.User, error) {
 	return x, nil
 }
 
-func KycView(username string, pwhash string) ([]database.User, error) {
+func KycView(username string) ([]database.User, error) {
 	var x []database.User
-	data, err := erpc.GetRequest(ApiUrl + "/user/kycview?" + "username=" + username + "&pwhash=" + pwhash)
+	data, err := erpc.GetRequest(ApiUrl + "/user/kycview?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -341,9 +341,9 @@ func KycView(username string, pwhash string) ([]database.User, error) {
 	return x, nil
 }
 
-func AskXLM(username string, pwhash string) (erpc.StatusResponse, error) {
+func AskXLM(username string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/user/askxlm?" + "username=" + username + "&pwhash=" + pwhash)
+	data, err := erpc.GetRequest(ApiUrl + "/user/askxlm?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return x, err
 	}
@@ -354,10 +354,10 @@ func AskXLM(username string, pwhash string) (erpc.StatusResponse, error) {
 	return x, nil
 }
 
-func TrustAsset(username string, pwhash string, assetName string, issuerPubkey string,
+func TrustAsset(username string, assetName string, issuerPubkey string,
 	limit string, seedpwd string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/user/trustasset?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/user/trustasset?" + "username=" + username + "&token=" + Token +
 		"&assetCode=" + assetName + "&assetIssuer=" + issuerPubkey + "&limit=" + limit + "&seedpwd=" + seedpwd)
 	if err != nil {
 		return x, err
@@ -369,10 +369,10 @@ func TrustAsset(username string, pwhash string, assetName string, issuerPubkey s
 	return x, nil
 }
 
-func GetTrustLimit(username string, pwhash string, assetName string) (string, error) {
+func GetTrustLimit(username string, assetName string) (string, error) {
 	var x string
-	data, err := erpc.GetRequest(ApiUrl + "/recipient/trustlimit?" + "username=" + username + "&pwhash=" +
-		pwhash + "&assetName=" + assetName)
+	data, err := erpc.GetRequest(ApiUrl + "/recipient/trustlimit?" + "username=" + username + "&token=" +
+		Token + "&assetName=" + assetName)
 	if err != nil {
 		return x, err
 	}
@@ -383,9 +383,9 @@ func GetTrustLimit(username string, pwhash string, assetName string) (string, er
 	return x, nil
 }
 
-func InvestInOpzoneCBond(projIndex string, amount string, username string, pwhash string, seedpwd string) (erpc.StatusResponse, error) {
+func InvestInOpzoneCBond(projIndex string, amount string, username string, seedpwd string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/constructionbond/invest?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/constructionbond/invest?" + "username=" + username + "&token=" + Token +
 		"&seedpwd=" + seedpwd + "&projIndex=" + projIndex + "&amount=" + amount)
 	if err != nil {
 		return x, err
@@ -397,9 +397,9 @@ func InvestInOpzoneCBond(projIndex string, amount string, username string, pwhas
 	return x, nil
 }
 
-func InvestInLivingUnitCoop(projIndex string, amount string, username string, pwhash string, seedpwd string) (erpc.StatusResponse, error) {
+func InvestInLivingUnitCoop(projIndex string, amount string, username string, seedpwd string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	data, err := erpc.GetRequest(ApiUrl + "/livingunitcoop/invest?" + "username=" + username + "&pwhash=" + pwhash +
+	data, err := erpc.GetRequest(ApiUrl + "/livingunitcoop/invest?" + "username=" + username + "&token=" + Token +
 		"&seedpwd=" + seedpwd + "&projIndex=" + projIndex + "&amount=" + amount)
 	if err != nil {
 		return x, err
@@ -411,9 +411,9 @@ func InvestInLivingUnitCoop(projIndex string, amount string, username string, pw
 	return x, nil
 }
 
-func UnlockCBond(username string, pwhash string, seedpwd string, projIndex string) (erpc.StatusResponse, error) {
+func UnlockCBond(username string, seedpwd string, projIndex string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	body := ApiUrl + "/recipient/unlock/opzones/cbond?" + "username=" + username + "&pwhash=" + pwhash +
+	body := ApiUrl + "/recipient/unlock/opzones/cbond?" + "username=" + username + "&token=" + Token +
 		"&projIndex=" + projIndex + "&seedpwd=" + seedpwd
 
 	data, err := erpc.GetRequest(body)
@@ -427,9 +427,9 @@ func UnlockCBond(username string, pwhash string, seedpwd string, projIndex strin
 	return x, nil
 }
 
-func IncreaseTrustLimit(username string, pwhash string, seedpwd string, trust string) (erpc.StatusResponse, error) {
+func IncreaseTrustLimit(username string, seedpwd string, trust string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	body := ApiUrl + "/user/increasetrustlimit?" + "username=" + username + "&pwhash=" + pwhash +
+	body := ApiUrl + "/user/increasetrustlimit?" + "username=" + username + "&token=" + Token +
 		"&seedpwd=" + seedpwd + "&trust=" + trust
 
 	data, err := erpc.GetRequest(body)
@@ -443,9 +443,9 @@ func IncreaseTrustLimit(username string, pwhash string, seedpwd string, trust st
 	return x, nil
 }
 
-func SendSharesEmail(username string, pwhash string, email1 string, email2 string, email3 string) (erpc.StatusResponse, error) {
+func SendSharesEmail(username string, email1 string, email2 string, email3 string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	body := ApiUrl + "/user/sendrecovery?" + "username=" + username + "&pwhash=" + pwhash +
+	body := ApiUrl + "/user/sendrecovery?" + "username=" + username + "&token=" + Token +
 		"&email1=" + email1 + "&email2=" + email2 + "&email3=" + email3
 
 	data, err := erpc.GetRequest(body)
@@ -459,9 +459,9 @@ func SendSharesEmail(username string, pwhash string, email1 string, email2 strin
 	return x, nil
 }
 
-func SendNewSharesEmail(username string, pwhash string, seedpwd string, email1 string, email2 string, email3 string) (erpc.StatusResponse, error) {
+func SendNewSharesEmail(username string, seedpwd string, email1 string, email2 string, email3 string) (erpc.StatusResponse, error) {
 	var x erpc.StatusResponse
-	body := ApiUrl + "/user/newsecrets?" + "username=" + username + "&pwhash=" + pwhash +
+	body := ApiUrl + "/user/newsecrets?" + "username=" + username + "&token=" + Token +
 		"&seedpwd=" + seedpwd + "&email1=" + email1 + "&email2=" + email2 + "&email3=" + email3
 
 	data, err := erpc.GetRequest(body)
@@ -475,8 +475,8 @@ func SendNewSharesEmail(username string, pwhash string, seedpwd string, email1 s
 	return x, nil
 }
 
-func KillRpc(username string, pwhash string) {
-	body := ApiUrl + "/admin/kill?" + "username=" + username + "&pwhash=" + pwhash
+func KillRpc(username string) {
+	body := ApiUrl + "/admin/kill?" + "username=" + username + "&token=" + Token
 	erpc.GetRequest(body)
 	data, _ := erpc.GetRequest(ApiUrl + "/ping")
 	var x erpc.StatusResponse
@@ -490,13 +490,13 @@ func KillRpc(username string, pwhash string) {
 	}
 }
 
-func FreezeRpc(username string, pwhash string) {
-	body := ApiUrl + "/admin/freeze?" + "username=" + username + "&pwhash=" + pwhash
+func FreezeRpc(username string) {
+	body := ApiUrl + "/admin/freeze?" + "username=" + username + "&token=" + Token
 	erpc.GetRequest(body)
 }
 
-func GenKillCode(username string, pwhash string) (string, error) {
-	body := ApiUrl + "/admin/gennuke?" + "username=" + username + "&pwhash=" + pwhash
+func GenKillCode(username string) (string, error) {
+	body := ApiUrl + "/admin/gennuke?" + "username=" + username + "&token=" + Token
 	data, err := erpc.GetRequest(body)
 	if err != nil {
 		return string(data), err

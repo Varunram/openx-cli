@@ -88,7 +88,7 @@ func Login(username string, pwhash string) (string, error) {
 	switch x.Role {
 	case "Investor":
 		wString = "Investor"
-		data, err = erpc.GetRequest(ApiUrl + "/investor/validate?" + "username=" + username + "&pwhash=" + pwhash)
+		data, err = erpc.GetRequest(ApiUrl + "/investor/validate?" + "username=" + username + "&token=" + Token)
 		if err != nil {
 			return wString, errors.Wrap(err, "could not call ivnestor validate function")
 		}
@@ -113,7 +113,7 @@ func Login(username string, pwhash string) (string, error) {
 		}
 	case "Recipient":
 		wString = "Recipient"
-		data, err = erpc.GetRequest(ApiUrl + "/recipient/validate?" + "username=" + username + "&pwhash=" + pwhash)
+		data, err = erpc.GetRequest(ApiUrl + "/recipient/validate?" + "username=" + username + "&token=" + Token)
 		if err != nil {
 			return wString, errors.Wrap(err, "could not call recipient validate endpoint")
 		}
@@ -134,7 +134,7 @@ func Login(username string, pwhash string) (string, error) {
 		}
 	case "Entity":
 		log.Println("ENTITY?")
-		data, err = erpc.GetRequest(ApiUrl + "/entity/validate?" + "username=" + username + "&pwhash=" + pwhash)
+		data, err = erpc.GetRequest(ApiUrl + "/entity/validate?" + "username=" + username + "&token=" + Token)
 		if err != nil {
 			return wString, errors.Wrap(err, "could not call entity validate endpoint")
 		}

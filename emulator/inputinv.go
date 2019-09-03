@@ -57,32 +57,32 @@ func ParseInputInv(input []string) error {
 	command := input[0]
 	switch command {
 	case "kill":
-		killHelper(LocalInvestor.U.Username, LocalInvestor.U.Pwhash)
+		killHelper(LocalInvestor.U.Username)
 	case "help":
 		fmt.Println("LIST OF SUPPORTED COMMANDS: ")
 		fmt.Println("ping, display, exchange, ipfs, vote, kyc, invest, create, send, receive")
 	case "ping":
 		pingHelper()
 	case "display":
-		displayHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash, "investor")
+		displayHelper(input, LocalInvestor.U.Username, "investor")
 	case "exchange":
-		exchangeHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash, LocalSeed)
+		exchangeHelper(input, LocalInvestor.U.Username, LocalSeed)
 	case "ipfs":
-		ipfsHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash)
+		ipfsHelper(input, LocalInvestor.U.Username)
 	case "send":
-		sendHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash)
+		sendHelper(input, LocalInvestor.U.Username)
 	case "receive":
-		receiveHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash)
+		receiveHelper(input, LocalInvestor.U.Username)
 	case "create":
-		createHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash, LocalInvestor.U.StellarWallet.PublicKey)
+		createHelper(input, LocalInvestor.U.Username, LocalInvestor.U.StellarWallet.PublicKey)
 	case "kyc":
-		kycHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash, LocalInvestor.U.Inspector)
+		kycHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Inspector)
 	case "increasetrust":
-		increaseTrustHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash)
+		increaseTrustHelper(input, LocalInvestor.U.Username)
 	case "sendshares":
-		sendSharesEmailHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash)
+		sendSharesEmailHelper(input, LocalInvestor.U.Username)
 	case "newshares":
-		genNewSharesHelper(input, LocalInvestor.U.Username, LocalInvestor.U.Pwhash, LocalSeedPwd)
+		genNewSharesHelper(input, LocalInvestor.U.Username, LocalSeedPwd)
 	// Investor only functions
 	case "vote":
 		if len(input) != 3 {
@@ -99,7 +99,7 @@ func ParseInputInv(input []string) error {
 			log.Println(err)
 			break
 		}
-		status, err := VoteTowardsProject(input[1], input[2], LocalInvestor.U.Username, LocalInvestor.U.Pwhash)
+		status, err := VoteTowardsProject(input[1], input[2], LocalInvestor.U.Username)
 		if err != nil {
 			log.Println(err)
 			break
@@ -128,7 +128,7 @@ func ParseInputInv(input []string) error {
 		switch platform {
 		case "opensolar":
 			// now we need to invest in this project, call RPC
-			status, err := InvestInProject(input[1], input[2], LocalInvestor.U.Username, LocalInvestor.U.Pwhash, LocalSeedPwd)
+			status, err := InvestInProject(input[1], input[2], LocalInvestor.U.Username, LocalSeedPwd)
 			if err != nil {
 				log.Println(err)
 				break
@@ -147,7 +147,7 @@ func ParseInputInv(input []string) error {
 			switch investmentChoice {
 			case "cbond":
 				// now we need to invest in this project, call RPC
-				status, err := InvestInOpzoneCBond(input[1], input[2], LocalInvestor.U.Username, LocalInvestor.U.Pwhash, LocalSeedPwd)
+				status, err := InvestInOpzoneCBond(input[1], input[2], LocalInvestor.U.Username, LocalSeedPwd)
 				if err != nil {
 					log.Println(err)
 					break
@@ -158,7 +158,7 @@ func ParseInputInv(input []string) error {
 					ColorOutput("INVESTMENT NOT SUCCESSFUL", RedColor)
 				}
 			case "lucoop":
-				status, err := InvestInLivingUnitCoop(input[1], input[2], LocalInvestor.U.Username, LocalInvestor.U.Pwhash, LocalSeedPwd)
+				status, err := InvestInLivingUnitCoop(input[1], input[2], LocalInvestor.U.Username, LocalSeedPwd)
 				if err != nil {
 					log.Println(err)
 					break

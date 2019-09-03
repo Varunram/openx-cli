@@ -53,25 +53,25 @@ func ParseInputOrig(input []string) error {
 		fmt.Println("ping, display, exchange, ipfs, create, send, receive, propose, " +
 			"newstage0, myproposed, addcollateral, mystage1, mystage0")
 	case "kill":
-		killHelper(LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		killHelper(LocalOriginator.U.Username)
 	case "ping":
 		pingHelper()
 	case "display":
-		displayHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Pwhash, "originator")
+		displayHelper(input, LocalOriginator.U.Username, "originator")
 	case "exchange":
-		exchangeHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Pwhash, LocalSeed)
+		exchangeHelper(input, LocalOriginator.U.Username, LocalSeed)
 	case "ipfs":
-		ipfsHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		ipfsHelper(input, LocalOriginator.U.Username)
 	case "send":
-		sendHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		sendHelper(input, LocalOriginator.U.Username)
 	case "receive":
-		receiveHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		receiveHelper(input, LocalOriginator.U.Username)
 	case "create":
-		createHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Pwhash, LocalOriginator.U.StellarWallet.PublicKey)
+		createHelper(input, LocalOriginator.U.Username, LocalOriginator.U.StellarWallet.PublicKey)
 	case "kyc":
-		kycHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Pwhash, LocalOriginator.U.Inspector)
+		kycHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Inspector)
 	case "increasetrust":
-		increaseTrustHelper(input, LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		increaseTrustHelper(input, LocalOriginator.U.Username)
 	// Originator only functions
 	case "propose":
 		fmt.Println("Proposing a contract can be done only through the opensolar webui" +
@@ -94,7 +94,7 @@ func ParseInputOrig(input []string) error {
 		collateral := input[1]
 		amount := input[2]
 
-		response, err := AddCollateral(LocalOriginator.U.Username, LocalOriginator.U.Pwhash, collateral, amount)
+		response, err := AddCollateral(LocalOriginator.U.Username, collateral, amount)
 		if err != nil {
 			log.Println(err)
 			break
@@ -107,21 +107,21 @@ func ParseInputOrig(input []string) error {
 			ColorOutput("RESPONSE STATUS: "+temp, GreenColor)
 		}
 	case "myproposed":
-		x, err := GetStage2Contracts(LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		x, err := GetStage2Contracts(LocalOriginator.U.Username)
 		if err != nil {
 			log.Println(err)
 			break
 		}
 		log.Println(x)
 	case "mystage0":
-		x, err := GetStage0Contracts(LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		x, err := GetStage0Contracts(LocalOriginator.U.Username)
 		if err != nil {
 			log.Println(err)
 			break
 		}
 		log.Println(x)
 	case "mystage1":
-		x, err := GetStage1Contracts(LocalOriginator.U.Username, LocalOriginator.U.Pwhash)
+		x, err := GetStage1Contracts(LocalOriginator.U.Username)
 		if err != nil {
 			log.Println(err)
 			break
