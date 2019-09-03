@@ -29,6 +29,7 @@ var (
 	LocalSeed         string
 	LocalSeedPwd      string
 	PlatformPublicKey string
+	Token string
 )
 
 // ApiUrl points to the platform instance's public endpoint

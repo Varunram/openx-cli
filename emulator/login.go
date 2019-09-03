@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
+	// "strings"
 
 	erpc "github.com/Varunram/essentials/rpc"
 	scan "github.com/Varunram/essentials/scan"
@@ -51,7 +53,29 @@ func HttpsGetRequest(url string) ([]byte, error) {
 func Login(username string, pwhash string) (string, error) {
 	var wString string
 
-	data, err := erpc.GetRequest(ApiUrl + "/user/validate?" + "username=" + username + "&pwhash=" + pwhash)
+	// first get the accessToken with the help of a post req
+	postData := url.Values{}
+	postData.Set("username", username)
+	postData.Set("pwhash", pwhash)
+
+	data, err := erpc.PostForm(ApiUrl + "/token", postData)
+	if err != nil {
+		return wString, errors.Wrap(err, "failed to send a post request")
+	}
+
+	var t rpc.GenAccessTokenReturn
+	err = json.Unmarshal(data, &t)
+	if err != nil {
+		log.Println(string(data))
+		return wString, errors.Wrap(err, "could not unmarshal json")
+	}
+
+	Token = t.Token
+	if len(Token) != 32 {
+		return wString, errors.Wrap(err, "could not generate token")
+	}
+	log.Println("TOKEN=", Token)
+	data, err = erpc.GetRequest(ApiUrl + "/user/validate?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return wString, errors.Wrap(err, "validate request failed")
 	}
@@ -73,12 +97,16 @@ func Login(username string, pwhash string) (string, error) {
 		if err != nil {
 			return wString, errors.Wrap(err, "could not unmarshal json")
 		}
+		log.Println(string(data))
 		LocalInvestor = inv
 		ColorOutput("ENTER YOUR SEEDPWD: ", CyanColor)
 		LocalSeedPwd, err = scan.ScanRawPassword()
 		if err != nil {
 			return wString, errors.Wrap(err, "could not scan raw password")
 		}
+		log.Println("LocalInvestor: ", LocalInvestor)
+		log.Println("U: ", LocalInvestor.U)
+
 		LocalSeed, err = wallet.DecryptSeed(LocalInvestor.U.StellarWallet.EncryptedSeed, LocalSeedPwd)
 		if err != nil {
 			return wString, errors.Wrap(err, "could not decrypt seed")
