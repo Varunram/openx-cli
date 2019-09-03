@@ -58,7 +58,7 @@ func Login(username string, pwhash string) (string, error) {
 	postData.Set("username", username)
 	postData.Set("pwhash", pwhash)
 
-	data, err := erpc.PostForm(ApiUrl + "/token", postData)
+	data, err := erpc.PostForm(ApiUrl+"/token", postData)
 	if err != nil {
 		return wString, errors.Wrap(err, "failed to send a post request")
 	}
