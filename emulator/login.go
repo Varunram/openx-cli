@@ -75,7 +75,7 @@ func Login(username string, pwhash string) (string, error) {
 		return wString, errors.Wrap(err, "could not generate token")
 	}
 	log.Println("TOKEN=", Token)
-	data, err = erpc.GetRequest(ApiUrl + "/user/validate?" + "username=" + username + "&token=" + Token)
+	data, err = erpc.GetRequest(ApiUrl + "/user/info?" + "username=" + username + "&token=" + Token)
 	if err != nil {
 		return wString, errors.Wrap(err, "validate request failed")
 	}
