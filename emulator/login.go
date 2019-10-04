@@ -75,23 +75,16 @@ func Login(username string, pwhash string) (string, error) {
 		return wString, errors.Wrap(err, "could not generate token")
 	}
 	log.Println("TOKEN=", Token)
-	data, err = erpc.GetRequest(ApiUrl + "/user/info?" + "username=" + username + "&token=" + Token)
+
+	data, err = erpc.GetRequest(ApiUrl + "/investor/validate?" + "username=" + username + "&token=" + Token)
 	if err != nil {
-		return wString, errors.Wrap(err, "validate request failed")
+		return wString, errors.Wrap(err, "could not call investor validate function")
 	}
-	var x rpc.ValidateParams
-	err = json.Unmarshal(data, &x)
-	if err != nil {
-		log.Println(string(data))
-		return wString, errors.Wrap(err, "could not unmarshal json")
-	}
-	switch x.Role {
-	case "Investor":
+
+	var inv opensolar.Investor
+	err = json.Unmarshal(data, &inv)
+	if err == nil && inv.U != nil {
 		wString = "Investor"
-		data, err = erpc.GetRequest(ApiUrl + "/investor/validate?" + "username=" + username + "&token=" + Token)
-		if err != nil {
-			return wString, errors.Wrap(err, "could not call ivnestor validate function")
-		}
 		var inv opensolar.Investor
 		err = json.Unmarshal(data, &inv)
 		if err != nil {
@@ -111,17 +104,18 @@ func Login(username string, pwhash string) (string, error) {
 		if err != nil {
 			return wString, errors.Wrap(err, "could not decrypt seed")
 		}
-	case "Recipient":
-		wString = "Recipient"
-		data, err = erpc.GetRequest(ApiUrl + "/recipient/validate?" + "username=" + username + "&token=" + Token)
-		if err != nil {
-			return wString, errors.Wrap(err, "could not call recipient validate endpoint")
-		}
-		var recp opensolar.Recipient
-		err = json.Unmarshal(data, &recp)
-		if err != nil {
-			return wString, errors.Wrap(err, "could not unmarshal json")
-		}
+		return wString, nil
+	}
+
+	wString = "Recipient"
+	data, err = erpc.GetRequest(ApiUrl + "/recipient/validate?" + "username=" + username + "&token=" + Token)
+	if err != nil {
+		return wString, errors.Wrap(err, "could not call recipient validate function")
+	}
+
+	var recp opensolar.Recipient
+	err = json.Unmarshal(data, &recp)
+	if err == nil && recp.U != nil {
 		LocalRecipient = recp
 		ColorOutput("ENTER YOUR SEEDPWD: ", CyanColor)
 		LocalSeedPwd, err = scan.ScanRawPassword()
@@ -132,43 +126,45 @@ func Login(username string, pwhash string) (string, error) {
 		if err != nil {
 			return wString, errors.Wrap(err, "could not decrypt seed")
 		}
-	case "Entity":
-		log.Println("ENTITY?")
-		data, err = erpc.GetRequest(ApiUrl + "/entity/validate?" + "username=" + username + "&token=" + Token)
+		return wString, nil
+	}
+
+	log.Println("ENTITY?")
+	data, err = erpc.GetRequest(ApiUrl + "/entity/validate?" + "username=" + username + "&token=" + Token)
+	if err != nil {
+		return wString, errors.Wrap(err, "could not call validate user, not an investor/recipient/entity")
+	}
+	var entity opensolar.Entity
+	err = json.Unmarshal(data, &entity)
+	if err != nil {
+		return wString, errors.Wrap(err, "could not unmarshal json")
+	}
+	if entity.Contractor {
+		LocalContractor = entity
+		wString = "Contractor"
+	} else if entity.Originator {
+		LocalOriginator = entity
+		wString = "Originator"
+	} else {
+		return wString, errors.New("Not a contractor")
+	}
+	ColorOutput("ENTER YOUR SEEDPWD: ", CyanColor)
+	LocalSeedPwd, err = scan.ScanRawPassword()
+	if err != nil {
+		return wString, errors.Wrap(err, "could not scan raw password")
+	}
+	if entity.Contractor {
+		LocalSeed, err = wallet.DecryptSeed(LocalContractor.U.StellarWallet.EncryptedSeed, LocalSeedPwd)
 		if err != nil {
-			return wString, errors.Wrap(err, "could not call entity validate endpoint")
+			return wString, errors.Wrap(err, "could not decrypt seed")
 		}
-		var entity opensolar.Entity
-		err = json.Unmarshal(data, &entity)
+	} else if entity.Originator {
+		LocalSeed, err = wallet.DecryptSeed(LocalOriginator.U.StellarWallet.EncryptedSeed, LocalSeedPwd)
 		if err != nil {
-			return wString, errors.Wrap(err, "could not unmarshal json")
-		}
-		if entity.Contractor {
-			LocalContractor = entity
-			wString = "Contractor"
-		} else if entity.Originator {
-			LocalOriginator = entity
-			wString = "Originator"
-		} else {
-			return wString, errors.New("Not a contractor")
-		}
-		ColorOutput("ENTER YOUR SEEDPWD: ", CyanColor)
-		LocalSeedPwd, err = scan.ScanRawPassword()
-		if err != nil {
-			return wString, errors.Wrap(err, "could not scan raw password")
-		}
-		if entity.Contractor {
-			LocalSeed, err = wallet.DecryptSeed(LocalContractor.U.StellarWallet.EncryptedSeed, LocalSeedPwd)
-			if err != nil {
-				return wString, errors.Wrap(err, "could not decrypt seed")
-			}
-		} else if entity.Originator {
-			LocalSeed, err = wallet.DecryptSeed(LocalOriginator.U.StellarWallet.EncryptedSeed, LocalSeedPwd)
-			if err != nil {
-				return wString, errors.Wrap(err, "could not decrypt seed")
-			}
+			return wString, errors.Wrap(err, "could not decrypt seed")
 		}
 	}
+
 	ColorOutput("AUTHENTICATED USER, YOUR ROLE IS: "+wString, GreenColor)
 	return wString, nil
 }
