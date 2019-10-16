@@ -14,7 +14,7 @@ import (
 	erpc "github.com/Varunram/essentials/rpc"
 	scan "github.com/Varunram/essentials/scan"
 	opensolar "github.com/YaleOpenLab/opensolar/core"
-	wallet "github.com/YaleOpenLab/openx/chains/xlm/wallet"
+	wallet "github.com/Varunram/essentials/xlm/wallet"
 	rpc "github.com/YaleOpenLab/openx/rpc"
 )
 
